@@ -8,8 +8,8 @@ from tkinter import *
 # Given: One Enterance to the north, one exit to the south
 # Given: No exits on the sides
             
-## find_path and Graph structure loosly based on this stackoverflow comment
-##http://stackoverflow.com/questions/19472530/representing-graphs-data-structure-in-python
+# find_path and Graph structure loosly based on this stackoverflow comment
+# http://stackoverflow.com/questions/19472530/representing-graphs-data-structure-in-python
 
 class MazeGraph(object):
     size_x = 0
@@ -52,22 +52,22 @@ class MazeGraph(object):
                 
         for y in range(1,self.size_y-1):
             for x in range(1,self.size_x-1):
-                #print(x,y)
+                # print(x,y)
                 if self.grid[y][x]==1:
                     continue
 
-                #Check surrounding open paths
+                # Check surrounding open paths
                 north = 1-self.grid[y-1][x]
                 south = 1-self.grid[y+1][x]
                 east = 1-self.grid[y][x-1]
                 west = 1-self.grid[y][x+1]
                 openness=north+south+east+west
 
-                #if it's open space add a node
+                # if it's open space add a node
                 self.add_node((y,x))
                 
-                #This is the add neighbors function
-                #(add any direct neighbor if path open and node already exists)
+                # This is the add neighbors function
+                # (add any direct neighbor if path open and node already exists)
                 if north == 1 and (y-1,x) in self.graph:
                     self.add_connection((y,x),(y-1,x))
                 if west == 1 and (y,x+1) in self.graph:
@@ -86,16 +86,14 @@ class MazeGraph(object):
 
     def add_connection(self, node1, node2):
         self.graph[node1].add(node2)
-        #print("Connection1 %s , %s" % (node1,node2))
+        # print("Connection1 %s , %s" % (node1,node2))
 
         self.graph[node2].add(node1)
-        #print("Connection2 %s , %s" % (node2,node1))
-
+        # print("Connection2 %s , %s" % (node2,node1))
 
     def add_node(self,node):
         self.graph[node]
-        #print("Node %s" % node)
-
+        # print("Node %s" % node)
 
     def remove(self, node):
         for iter_node, connection in self._graph.items():
@@ -112,22 +110,22 @@ class MazeGraph(object):
         return node1 in self.graph and node2 in self.graph[node1]
 
     def find_path(self, node1, node2, path=[]):
-        #recursively calling self and passing in existing path
+        # recursively calling self and passing in existing path
         path = path + [node1]
         print(self.current_path)
         self.current_path.append(path)
         
-        #You're there!
+        # You're there!
         if node1 == node2:
             return path
 
-        #Not in Graph!
+        # Not in Graph!
         if node1 not in self.graph:
             return None
 
-        #Look at all connected nodes for node 1
+#        Look at all connected nodes for node 1
         for node in self.graph[node1]:
-            #if we haven't been down one call my self and keep looking for the end
+            # if we haven't been down one call my self and keep looking for the end
             if node not in path:
                 new_path = self.find_path(node, node2, path)
                 if new_path:
@@ -135,8 +133,8 @@ class MazeGraph(object):
         return None
 
     def printGrid(self,canvas,color="Black"):
-##        for y in range(self.size_y):
-##            print(self.grid[y])
+        # for y in range(self.size_y):
+        #     print(self.grid[y])
         for y in range(MazeGraphObject.size_y):
             for x in range(MazeGraphObject.size_x):
                 if MazeGraphObject.grid[y][x] == 1:
