@@ -10,13 +10,20 @@ class InputGrid(tkinter.Tk):
         self.grid_y = 10
         self.enter_x_value = tkinter.StringVar()
         self.enter_y_value = tkinter.StringVar()
-        self.enter_x_value.set("10")
-        self.enter_y_value.set("10")
+        self.enter_x_value.set(self.grid_x)
+        self.enter_y_value.set(self.grid_y)
         self.cellSize = 100
+        self.current_cell = 0
+        self.drag_color = "none"
 
+        self.build_ui()
+
+    def build_ui(self):
         self.canvas = tkinter.Canvas(self, width=self.grid_x*self.cellSize, height=self.grid_y*self.cellSize)
         self.canvas.pack(fill="both", expand=1)
-        self.canvas.bind("<Button-1>", self.on_button_press)
+        self.canvas.bind("<ButtonRelease-1>", self.on_button_release)
+        self.canvas.bind("<B1-Motion>", self.on_button_move)
+
         self.draw_grid()
 
         self.enter_x = tkinter.Entry()
@@ -33,6 +40,17 @@ class InputGrid(tkinter.Tk):
         self.output_button = tkinter.Button(text="Go", command=self.output_grid)
         self.output_button.pack()
 
+    def on_button_release(self, event):
+        self.current_cell = self.canvas.find_closest(event.x, event.y)[0]
+        self.drag_color = "none"
+        self.update_cell(self.canvas.find_closest(event.x, event.y)[0])
+
+    def on_button_move(self, event):
+        if self.current_cell != self.canvas.find_closest(event.x, event.y)[0]:
+            self.current_cell = self.canvas.find_closest(event.x, event.y)[0]
+            self.drag_color = "white"
+            self.update_cell(self.canvas.find_closest(event.x, event.y)[0])
+
     def resize_grid(self):
         self.grid_x = int(self.enter_x_value.get())
         self.grid_y = int(self.enter_y_value.get())
@@ -45,14 +63,10 @@ class InputGrid(tkinter.Tk):
         for y in range(self.grid_y):
             for x in range(self.grid_x):
                 self.canvas.create_rectangle(x * self.cellSize, y * self.cellSize, x * self.cellSize + self.cellSize,
-                                             y * self.cellSize + self.cellSize, fill="white")
-
-    def on_button_press(self, event):
-        self.update_cell(self.canvas.find_closest(event.x, event.y)[0])
+                                             y * self.cellSize + self.cellSize, fill="black")
 
     def update_cell(self, _item):
-        print(self.canvas.itemcget(_item, "fill"))
-        if self.canvas.itemcget(_item, "fill") == "white":
+        if self.canvas.itemcget(_item, "fill") == "white" and self.drag_color != "white":
             self.canvas.itemconfigure(_item, fill="black")
         else:
             self.canvas.itemconfigure(_item, fill="white")
