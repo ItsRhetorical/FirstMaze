@@ -53,7 +53,7 @@ class MazeGraph(object):
         for y in range(1,self.size_y-1):
             for x in range(1,self.size_x-1):
                 # print(x,y)
-                if self.grid[y][x]==1:
+                if self.grid[y][x] == 1:
                     continue
 
                 # Check surrounding open paths
@@ -205,7 +205,7 @@ MazeGraphObject.buildGraph()
 FinalPath=MazeGraphObject.find_path(MazeGraphObject.maze_enterance,MazeGraphObject.maze_exit)
 MazeGraphObject.print_path(FinalPath)
 
-path1 = Path(wCanvas,MazeGraphObject.current_path,"Blue")
+path1 = Path(wCanvas, MazeGraphObject.current_path, "Blue")
 path1.update()
 
 
