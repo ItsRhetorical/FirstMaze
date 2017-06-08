@@ -1,6 +1,6 @@
 import tkinter
 
-
+# can this be seen
 # Goal: Produce a Grid Suitable for the Animate.py program
 class InputGrid(tkinter.Tk):
 

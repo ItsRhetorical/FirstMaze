@@ -129,7 +129,7 @@ class MazeGraph(object):
             if node not in path:
                 new_path = self.find_path(node, node2, path)
                 if new_path:
-                   return new_path
+                    return new_path
         return None
 
     def printGrid(self,canvas,color="Black"):
@@ -164,7 +164,7 @@ class Path:
     
     def update(self):
 
-        print("Step:",self.step)
+        # print("Step:",self.step)
         if self.step == self.end:
             return
         
