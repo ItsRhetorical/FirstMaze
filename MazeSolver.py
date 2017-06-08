@@ -1,7 +1,7 @@
 import tkinter
-import Animate
+import Classes
 
-# Goal: Produce a Grid Suitable for the Animate.py program
+# Goal: Produce a Grid Suitable for the Classes.py program
 
 
 class InputGrid(tkinter.Tk):
@@ -94,12 +94,12 @@ class InputGrid(tkinter.Tk):
                     self.grid[y - 1][x - 1] = 1
         for y in range(self.grid_y):
             print(self.grid[y])
-        maze_graph = Animate.MazeGraph(self.grid)
+        maze_graph = Classes.MazeGraph(self.grid)
         maze_graph.printGrid(self.canvas, self.cellSize, color="black")
         maze_graph.buildGraph()
         maze_graph.find_path(maze_graph.maze_enterance, maze_graph.maze_exit)
         print("Current Maze solution length:", len(maze_graph.current_path))
-        path1 = Animate.Path(maze_graph, self.canvas, maze_graph.current_path, self.cellSize, "Blue")
+        path1 = Classes.Path(maze_graph, self.canvas, maze_graph.current_path, self.cellSize, "Blue")
         path1.update()
 
 if __name__ == "__main__":

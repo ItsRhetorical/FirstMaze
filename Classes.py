@@ -78,7 +78,6 @@ class MazeGraph(object):
                     self.add_connection((y, x), (y+1, x))
                 if east == 1 and (y, x-1) in self.graph:
                     self.add_connection((y, x), (y, x-1))
-                
 
         print("Enterance:", self.maze_enterance)
         print("Exit: ", self.maze_exit)
