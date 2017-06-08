@@ -1,4 +1,5 @@
 import tkinter
+import Animate
 
 # Goal: Produce a Grid Suitable for the Animate.py program
 
@@ -6,13 +7,15 @@ import tkinter
 class InputGrid(tkinter.Tk):
     def __init__(self):
         tkinter.Tk.__init__(self)
-        self.grid_x = 10
-        self.grid_y = 10
+        self.grid_x = 50
+        self.grid_y = 50
+        self.grid = [[0] * self.grid_x for i in range(self.grid_y)]
+        self.cell_id = []
         self.enter_x_value = tkinter.StringVar()
         self.enter_y_value = tkinter.StringVar()
         self.enter_x_value.set(self.grid_x)
         self.enter_y_value.set(self.grid_y)
-        self.cellSize = 50
+        self.cellSize = 15
         self.current_cell = 0
         self.dragging = False
         self.drag_init = False
@@ -62,15 +65,16 @@ class InputGrid(tkinter.Tk):
     def resize_grid(self):
         self.grid_x = int(self.enter_x_value.get())
         self.grid_y = int(self.enter_y_value.get())
-        self.cellSize = min(self.canvas.winfo_width()/self.grid_x, self.canvas.winfo_height()/self.grid_y)
+        self.cellSize = min(self.canvas.winfo_width()//self.grid_x, self.canvas.winfo_height()//self.grid_y)
         self.draw_grid()
 
     def draw_grid(self):
         self.canvas.delete("all")
+        self.cell_id.clear()
         for y in range(self.grid_y):
             for x in range(self.grid_x):
-                self.canvas.create_rectangle(x * self.cellSize, y * self.cellSize, x * self.cellSize + self.cellSize,
-                                             y * self.cellSize + self.cellSize, fill="black")
+                self.cell_id.append(self.canvas.create_rectangle(x * self.cellSize, y * self.cellSize, x * self.cellSize + self.cellSize,
+                                             y * self.cellSize + self.cellSize, fill="black"))
 
     def update_cell(self, _item):
         if self.canvas.itemcget(_item, "fill") == "white" and self.dragging is False:
@@ -79,16 +83,24 @@ class InputGrid(tkinter.Tk):
             self.canvas.itemconfigure(_item, fill="white")
 
     def output_grid(self):
+        # Resets grid list to be blank
+        self.grid[:] = []
         self.grid = [[0] * self.grid_x for i in range(self.grid_y)]
         for y in range(1, self.grid_y+1):
             for x in range(1, self.grid_x+1):
-                if self.canvas.itemcget(x + y * self.grid_y - self.grid_y, "fill") == "white":
+                if self.canvas.itemcget(self.cell_id[0] + x + y * self.grid_y - self.grid_y, "fill") == "white":
                     self.grid[y-1][x-1] = 0
                 else:
                     self.grid[y - 1][x - 1] = 1
         for y in range(self.grid_y):
             print(self.grid[y])
-
+        maze_graph = Animate.MazeGraph(self.grid)
+        maze_graph.printGrid(self.canvas, self.cellSize, color="black")
+        maze_graph.buildGraph()
+        maze_graph.find_path(maze_graph.maze_enterance, maze_graph.maze_exit)
+        print("Current Maze solution length:", len(maze_graph.current_path))
+        path1 = Animate.Path(maze_graph, self.canvas, maze_graph.current_path, self.cellSize, "Blue")
+        path1.update()
 
 if __name__ == "__main__":
     app = InputGrid()
