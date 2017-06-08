@@ -1,7 +1,7 @@
 # FirstMaze
 Simple maze solving program to learn python
 
-Run Input.py to get started
+Run maze Solver.py to get started
 
 Note currently only one entrance is supported (on the top row) and one exit (on the bottom row)
 Side openings are technically not supported
