@@ -3,8 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="2cdce651-efe2-4991-9dbe-affcc8b250fb" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Animate.py" afterPath="$PROJECT_DIR$/Animate.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Input.py" afterPath="$PROJECT_DIR$/Input.py" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -350,7 +348,14 @@
       <option name="project" value="LOCAL" />
       <updated>1496926966700</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="integration to go button running animation, optimization of the redraw functions">
+      <created>1496945064536</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1496945064536</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
@@ -418,7 +423,8 @@
     <MESSAGE value="IDE files Spacing cleanup" />
     <MESSAGE value="grid sizing changes" />
     <MESSAGE value="Click and Drag finalization" />
-    <option name="LAST_COMMIT_MESSAGE" value="Click and Drag finalization" />
+    <MESSAGE value="integration to go button running animation, optimization of the redraw functions" />
+    <option name="LAST_COMMIT_MESSAGE" value="integration to go button running animation, optimization of the redraw functions" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
