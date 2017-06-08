@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="2cdce651-efe2-4991-9dbe-affcc8b250fb" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Input.py" afterPath="$PROJECT_DIR$/Input.py" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -36,8 +35,8 @@
       <file leaf-file-name="Input.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Input.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="167">
-              <caret line="47" column="29" lean-forward="false" selection-start-line="47" selection-start-column="29" selection-end-line="47" selection-end-column="29" />
+            <state relative-caret-position="442">
+              <caret line="26" column="0" lean-forward="true" selection-start-line="26" selection-start-column="0" selection-end-line="26" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -55,6 +54,11 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
@@ -285,7 +289,14 @@
       <option name="project" value="LOCAL" />
       <updated>1496923318651</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Click and Drag finalization">
+      <created>1496926788761</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1496926788761</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
@@ -351,7 +362,8 @@
     <MESSAGE value="IDE files" />
     <MESSAGE value="IDE files Spacing cleanup" />
     <MESSAGE value="grid sizing changes" />
-    <option name="LAST_COMMIT_MESSAGE" value="grid sizing changes" />
+    <MESSAGE value="Click and Drag finalization" />
+    <option name="LAST_COMMIT_MESSAGE" value="Click and Drag finalization" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -443,8 +455,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Input.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="167">
-          <caret line="47" column="29" lean-forward="false" selection-start-line="47" selection-start-column="29" selection-end-line="47" selection-end-column="29" />
+        <state relative-caret-position="442">
+          <caret line="26" column="0" lean-forward="true" selection-start-line="26" selection-start-column="0" selection-end-line="26" selection-end-column="0" />
           <folding />
         </state>
       </provider>
