@@ -4,12 +4,6 @@ from pprint import pprint
 # Given: Maze defined by binary grid (1 = wall)
 # Given: Grid is rectangular
 # Given: Only cardinal movement is allowed
-# Given: One Enterance to the north, one exit to the south
-# Given: No exits on the sides
-            
-# find_path and Graph structure loosly based on this stackoverflow comment
-# http://stackoverflow.com/questions/19472530/representing-graphs-data-structure-in-python
-
 
 class MazeGraph(object):
     size_x = 0
@@ -32,56 +26,41 @@ class MazeGraph(object):
         self.grid = _grid
 
     def build_graph(self):
-        num_entrance = 0
-        num_exit = 0
-        for x in range(1, self.size_x-1):
-           
-            if self.grid[0][x] == 0:
-                self.add_node((0, x))
-                self.maze_entrance = (0, x)
-                num_entrance += 1
+        self.graph[("s", "s")]
+        self.maze_entrance = ("s", "s")
+        self.graph[("e", "e")]
+        self.maze_exit = ("e", "e")
 
-            if self.grid[self.size_y-1][x] == 0:
-                self.add_node((self.size_y-1, x))
-                self.maze_exit = (self.size_y-1, x)
-                num_exit += 1
-                
-        if num_entrance != 1:
-            print("Only one entrance allowed!")
-            print("Entrances:", num_entrance)
-        if num_exit != 1:
-            print("Only one exit allowed!")
-            print("Exits:", num_exit)
-                
-        for y in range(1, self.size_y-1):
-            for x in range(1, self.size_x-1):
-                # print(x,y)
+        for y in range(self.size_y):
+            for x in range(self.size_x):
+
+                # if on a wall do nothing
                 if self.grid[y][x] == 1:
                     continue
 
-                # Check surrounding open paths
-                north = 1-self.grid[y-1][x]
-                south = 1-self.grid[y+1][x]
-                east = 1-self.grid[y][x-1]
-                west = 1-self.grid[y][x+1]
-                # openness = north + south + east + west
-
                 # if it's open space add a node
                 self.add_node((y, x))
-                
-                # This is the add neighbors function
-                # (add any direct neighbor if path open and node already exists)
-                if north == 1 and (y-1, x) in self.graph:
-                    self.add_connection((y, x), (y-1, x))
-                if west == 1 and (y, x+1) in self.graph:
-                    self.add_connection((y, x), (y, x+1))
-                if south == 1 and (y+1, x) in self.graph:
-                    self.add_connection((y, x), (y+1, x))
-                if east == 1 and (y, x-1) in self.graph:
-                    self.add_connection((y, x), (y, x-1))
 
-        print("Entrance:", self.maze_entrance)
-        print("Exit: ", self.maze_exit)
+                # Check surrounding open paths
+                # (add any direct neighbor if path open and node already exists)
+                try:
+                    if (y-1, x) in self.graph:
+                        self.add_connection((y, x), (y-1, x))
+                except KeyError:
+                    # ran off top
+                    pass
+                try:
+                    if (y, x-1) in self.graph:
+                        self.add_connection((y, x), (y, x-1))
+                except KeyError:
+                    # Left Edge, do nothing
+                    pass
+
+        for x in range(self.size_x):
+            if (0, x) in self.graph:
+                self.add_connection((0, x), self.maze_entrance)
+            if (self.size_y-1, x) in self.graph:
+                self.add_connection((self.size_y-1, x), self.maze_exit)
 
         print("Map of Connections:")
         pprint(self)
@@ -94,10 +73,7 @@ class MazeGraph(object):
 
     def add_connection(self, node1, node2):
         self.graph[node1].add(node2)
-        # print("Connection1 %s , %s" % (node1,node2))
-
         self.graph[node2].add(node1)
-        # print("Connection2 %s , %s" % (node2,node1))
 
     def add_node(self, node):
         self.graph[node]
@@ -146,8 +122,15 @@ class MazeGraph(object):
 
         # print("Path: ")
         # pprint(_path)
-        for node in _path:
-            canvas.itemconfig(cell_id[node], fill=_color, tags=_color)
+        try:
+            for node in _path:
+                try:
+                    canvas.itemconfig(cell_id[node], fill=_color, tags=_color)
+                except KeyError:
+                    if node[0] != "s" and node[0] != "e":
+                        print(node)
+        except TypeError:
+            print("No path!")
 
     def __repr__(self):
         from pprint import pformat
@@ -174,47 +157,18 @@ class Path:
 
         _path = self.pathset[self.step]
         for cell in self.canvas.find_withtag(self.color):
-            self.canvas.itemconfig(cell, fill="white")
+                self.canvas.itemconfig(cell, fill="white")
 
         for node in _path:
-            self.canvas.itemconfig(self.cell_id[node], fill=self.color, tags=self.color)
+            try:
+                self.canvas.itemconfig(self.cell_id[node], fill=self.color, tags=self.color)
+            except KeyError:
+                if node[0] != "s" and node[0] != "e":
+                    print(node)
 
         self.canvas.after(1, self.update)
         self.step += 1
 
-
-##MAIN
-
-# firstGrid = [
-# [1, 1, 0, 1, 1, 1, 1, 1, 1, 1],
-# [1, 1, 0, 0, 0, 0, 0, 1, 1, 1],
-# [1, 1, 0, 1, 1, 1, 0, 0, 0, 1],
-# [1, 0, 0, 1, 1, 1, 0, 1, 0, 1],
-# [1, 0, 0, 0, 0, 0, 1, 1, 0, 1],
-# [1, 1, 0, 1, 1, 0, 1, 1, 0, 1],
-# [1, 1, 0, 0, 1, 0, 1, 1, 0, 1],
-# [1, 1, 1, 0, 1, 0, 1, 0, 0, 1],
-# [1, 1, 1, 0, 0, 0, 1, 1, 1, 1],
-# [1, 1, 1, 1, 1, 0, 1, 1, 1, 1]]
-#
-# MazeGraphObject = MazeGraph(firstGrid)
-#
-# root = Tk()
-# wCanvas = Canvas(root, width=MazeGraphObject.size_x*100, height=MazeGraphObject.size_y*100)
-# wCanvas.pack()
-#
-# MazeGraphObject.printGrid(wCanvas)
-#
-# MazeGraphObject.buildGraph()
-#
-# FinalPath=MazeGraphObject.find_path(MazeGraphObject.maze_entrance,MazeGraphObject.maze_exit)
-# MazeGraphObject.print_path(wCanvas,FinalPath)
-#
-# path1 = Path(wCanvas, MazeGraphObject.current_path, "Blue")
-# path1.update()
-#
-#
-# root.mainloop()
 
 
 

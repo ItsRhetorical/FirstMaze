@@ -86,7 +86,7 @@ class InputGrid(tkinter.Tk):
 
     def reset_input(self):
         self.draw_grid()
-        self.prepare_grid(True)
+        self.prepare_grid()
         self.maze_graph.clear_paths()
         self.grid[:] = []
         self.grid = [[0] * self.grid_x for i in range(self.grid_y)]
@@ -115,7 +115,10 @@ class InputGrid(tkinter.Tk):
         self.prepare_grid()
         self.maze_graph.set_grid(self.grid)
         self.maze_graph.build_graph()
-        self.maze_graph.find_path(self.maze_graph.maze_entrance, self.maze_graph.maze_exit)
+        if self.maze_graph.find_path(self.maze_graph.maze_entrance, self.maze_graph.maze_exit) is None :
+            print("No path!")
+            return
+
         print("Current Maze solution length:", len(self.maze_graph.current_path))
 
         self.direct_solve.config(state="disabled")
@@ -123,7 +126,6 @@ class InputGrid(tkinter.Tk):
 
         path1 = Classes.Path(self.maze_graph, self, "Blue")
         path1.update()
-
 
     def prepare_grid(self, _print=False):
         # Resets grid list to be blank
@@ -142,15 +144,3 @@ class InputGrid(tkinter.Tk):
 if __name__ == "__main__":
     app = InputGrid()
     app.mainloop()
-
-#
-# [1, 1, 1, 0, 1, 1, 1, 1, 1, 1]
-# [1, 0, 0, 0, 1, 0, 0, 0, 0, 1]
-# [1, 0, 1, 0, 1, 1, 0, 0, 0, 1]
-# [1, 0, 1, 0, 1, 0, 0, 0, 0, 1]
-# [1, 0, 1, 0, 1, 0, 0, 0, 0, 1]
-# [1, 0, 1, 0, 1, 0, 0, 0, 0, 1]
-# [1, 0, 1, 0, 1, 0, 0, 0, 0, 1]
-# [1, 0, 1, 0, 1, 1, 1, 1, 1, 1]
-# [1, 0, 0, 0, 0, 0, 0, 0, 0, 1]
-# [1, 1, 1, 1, 1, 1, 1, 1, 0, 1]
