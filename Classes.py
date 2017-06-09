@@ -1,6 +1,5 @@
 from collections import defaultdict
 from pprint import pprint
-from tkinter import *
 
 # Given: Maze defined by binary grid (1 = wall)
 # Given: Grid is rectangular
@@ -15,12 +14,11 @@ from tkinter import *
 class MazeGraph(object):
     size_x = 0
     size_y = 0
-    maze_enterance = ()
+    maze_entrance = ()
     maze_exit = ()
     grid = []
     current_path = []
-    cell_id = {}
-    
+
     def __init__(self, _grid):
         self.graph = defaultdict(set)
         self.grid = _grid
@@ -30,24 +28,27 @@ class MazeGraph(object):
         print("Height: %d" % self.size_y)
         print("Width: %d" % self.size_x)
 
-    def buildGraph(self):
-        num_enterance = 0
+    def set_grid(self, _grid):
+        self.grid = _grid
+
+    def build_graph(self):
+        num_entrance = 0
         num_exit = 0
         for x in range(1, self.size_x-1):
            
             if self.grid[0][x] == 0:
                 self.add_node((0, x))
-                self.maze_enterance = (0, x)
-                num_enterance += 1
+                self.maze_entrance = (0, x)
+                num_entrance += 1
 
             if self.grid[self.size_y-1][x] == 0:
                 self.add_node((self.size_y-1, x))
                 self.maze_exit = (self.size_y-1, x)
                 num_exit += 1
                 
-        if num_enterance != 1:
-            print("Only one enterance allowed!")
-            print("Enterances:", num_enterance)
+        if num_entrance != 1:
+            print("Only one entrance allowed!")
+            print("Entrances:", num_entrance)
         if num_exit != 1:
             print("Only one exit allowed!")
             print("Exits:", num_exit)
@@ -63,7 +64,7 @@ class MazeGraph(object):
                 south = 1-self.grid[y+1][x]
                 east = 1-self.grid[y][x-1]
                 west = 1-self.grid[y][x+1]
-                openness=north+south+east+west
+                # openness = north + south + east + west
 
                 # if it's open space add a node
                 self.add_node((y, x))
@@ -79,11 +80,17 @@ class MazeGraph(object):
                 if east == 1 and (y, x-1) in self.graph:
                     self.add_connection((y, x), (y, x-1))
 
-        print("Enterance:", self.maze_enterance)
+        print("Entrance:", self.maze_entrance)
         print("Exit: ", self.maze_exit)
 
         print("Map of Connections:")
         pprint(self)
+
+    def clear_paths(self):
+        self.current_path.clear()
+        self.graph.clear()
+        self.grid[:] = []
+        self.grid = [[0] * self.size_x for i in range(self.size_y)]
 
     def add_connection(self, node1, node2):
         self.graph[node1].add(node2)
@@ -92,12 +99,12 @@ class MazeGraph(object):
         self.graph[node2].add(node1)
         # print("Connection2 %s , %s" % (node2,node1))
 
-    def add_node(self,node):
+    def add_node(self, node):
         self.graph[node]
         # print("Node %s" % node)
 
     def remove(self, node):
-        for iter_node, connection in self._graph.items():
+        for iter_node, connection in self.graph.items():
             try:
                 connection.remove(node)
             except KeyError:
@@ -133,25 +140,14 @@ class MazeGraph(object):
                     return new_path
         return None
 
-    def printGrid(self, canvas, cell_size, color="Black"):
-        # for y in range(self.size_y):
-        #     print(self.grid[y])
-        for y in range(self.size_y):
-            for x in range(self.size_x):
-                if self.grid[y][x] == 1:
-                    self.cell_id[(y, x)] = canvas.create_rectangle(x*cell_size,y*cell_size,x*cell_size+cell_size,
-                                                                 y*cell_size+cell_size, fill=color, tags=color)
-                else:
-                    self.cell_id[(y, x)] = canvas.create_rectangle(x*cell_size,y*cell_size,x*cell_size+cell_size,
-                                                                 y*cell_size+cell_size, fill="White", tags="white")
-        # pprint(self.cell_id)
+    def print_path(self, _grid, _path, _color="Red"):
+        canvas = _grid.canvas
+        cell_id = _grid.cell_id
 
-    def print_path(self, _canvas, _path, _cell_size, color="Red"):
         # print("Path: ")
         # pprint(_path)
         for node in _path:
-            _canvas.create_rectangle(node[1]*_cell_size, node[0]*_cell_size, node[1]*_cell_size+_cell_size,
-                                     node[0]*_cell_size+_cell_size, fill=color)
+            canvas.itemconfig(cell_id[node], fill=_color, tags=_color)
 
     def __repr__(self):
         from pprint import pformat
@@ -159,19 +155,21 @@ class MazeGraph(object):
 
 
 class Path:
-    def __init__(self, _mazeGraph, _canvas, _pathSet, _cellSize, _color):
-        self.pathset = _pathSet
+    def __init__(self, _mazeGraph, _grid, _color):
+        self.pathset = _mazeGraph.current_path
         self.step = 0
         self.color = _color
-        self.canvas = _canvas
+        self.grid = _grid
+        self.canvas = _grid.canvas
         self.MazeGraph = _mazeGraph
-        self.cellSize = _cellSize
+        self.cellSize = _grid.cellSize
+        self.cell_id = _grid.cell_id
 
     def update(self):
 
         # print("Step:",self.step)
         if self.step == len(self.pathset):
-            self.MazeGraph.print_path(self.canvas, self.pathset[self.step-1], self.cellSize, "red")
+            self.MazeGraph.print_path(self.grid, self.pathset[self.step-1], "red")
             return
 
         _path = self.pathset[self.step]
@@ -179,7 +177,7 @@ class Path:
             self.canvas.itemconfig(cell, fill="white")
 
         for node in _path:
-            self.canvas.itemconfig(self.MazeGraph.cell_id[node], fill=self.color, tags=self.color)
+            self.canvas.itemconfig(self.cell_id[node], fill=self.color, tags=self.color)
 
         self.canvas.after(1, self.update)
         self.step += 1
@@ -209,7 +207,7 @@ class Path:
 #
 # MazeGraphObject.buildGraph()
 #
-# FinalPath=MazeGraphObject.find_path(MazeGraphObject.maze_enterance,MazeGraphObject.maze_exit)
+# FinalPath=MazeGraphObject.find_path(MazeGraphObject.maze_entrance,MazeGraphObject.maze_exit)
 # MazeGraphObject.print_path(wCanvas,FinalPath)
 #
 # path1 = Path(wCanvas, MazeGraphObject.current_path, "Blue")
